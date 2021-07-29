@@ -17,28 +17,33 @@ import br.com.prime.http.repository.UsuarioRepository;
 @RequestMapping("lista")
 public class ListarUsuarioController {
 	private UsuarioRepository repository;
-	ListarUsuarioController(UsuarioRepository usuarioRepository){
-		this.repository=usuarioRepository;
+
+	ListarUsuarioController(UsuarioRepository usuarioRepository) {
+		this.repository = usuarioRepository;
 	}
-	
+
 	@GetMapping
-	public List listarUsuarios(){
-	   return repository.findAll();
+	public List listarUsuarios() {
+		return repository.findAll();
 	}
-	
-	/*@GetMapping(path = {"/{id}"})
-	public Optional<Usuario> findById(@PathVariable long id){
-	   return repository.findById(id);
-	}*/
-	
-	@GetMapping(path = {"/{id}"})
-	public ResponseEntity <Usuario> buscaId(@PathVariable long id){
-		
-	   if(repository.findById(id).equals(null)) {
-		   System.out.println("Não existesuário com essa chave");
-		   return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-	   }else {
-	   return new ResponseEntity<>(HttpStatus.OK);
-	   }
+
+	/*
+	 * @GetMapping(path = {"/{id}"}) public Optional<Usuario> findById(@PathVariable
+	 * long id){ return repository.findById(id); }
+	 */
+
+	@GetMapping(path = { "/{id}" })
+	public ResponseEntity<Object> buscaId(@PathVariable long id) {
+		Optional<Usuario> resultadoBusca = null;
+		try {
+			resultadoBusca = repository.findById(id);
+			if (resultadoBusca.equals(null)) {
+				System.out.println("Não existesuário com essa chave");
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			} 
+		}catch (Exception e) {
+			e.getStackTrace();
+		}
+		return new ResponseEntity<>(resultadoBusca, HttpStatus.FOUND);
 	}
 }
