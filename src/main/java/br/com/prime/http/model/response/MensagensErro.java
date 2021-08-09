@@ -10,6 +10,9 @@ public class MensagensErro {
 		this.dataAtual = dataAtual;
 		this.mensagem = mensagem;
 	}
+	public MensagensErro(String mensagem) {
+		this.mensagem = mensagem;
+	}
 	public Date getDataAtual() {
 		return dataAtual;
 	}

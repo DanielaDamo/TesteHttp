@@ -15,13 +15,26 @@ import br.com.prime.http.model.response.MensagensErro;
 @ControllerAdvice
 public class AnyExceptionHandler extends ResponseEntityExceptionHandler{
 	
-	@ExceptionHandler(value= {Exception.class})
-	public ResponseEntity<Object> tratamentoDeExcecoes(Exception e, WebRequest request){
+	public String AnyExceptionHandler(MensagensErro mensagem) {
+		return mensagem.getMensagem();
+	}
+
+	@ExceptionHandler(value = {Exception.class})
+	public ResponseEntity<Object> tratamentoDeException(Exception e, WebRequest request){
 		String descricaoErro = e.getLocalizedMessage();
 		if(descricaoErro==null) {
 			descricaoErro = e.toString();
 		}
 		MensagensErro mensagem = new MensagensErro(new Date(), descricaoErro);
 		return new ResponseEntity<>(mensagem, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	@ExceptionHandler(value = {RuntimeException.class})
+	public ResponseEntity<Object> tratamentoDeRuntimeException(RuntimeException e, WebRequest request){
+		String descricaoErro = e.getLocalizedMessage();
+		if(descricaoErro==null) {
+			descricaoErro = e.toString();
+		}
+		MensagensErro mensagem = new MensagensErro(new Date(), descricaoErro);
+		return new ResponseEntity<>(mensagem, new HttpHeaders(), HttpStatus.NOT_FOUND);
 	}
 }

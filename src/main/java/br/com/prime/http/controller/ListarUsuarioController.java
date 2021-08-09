@@ -37,7 +37,7 @@ public class ListarUsuarioController {
 		Optional<Usuario> resultadoBusca = null;
 		try {
 			resultadoBusca = repository.findById(id);
-			if (resultadoBusca.equals(null)) {
+			if (!resultadoBusca.isPresent()) {
 				System.out.println("Não existesuário com essa chave");
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			} 
